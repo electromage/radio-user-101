@@ -26,12 +26,13 @@ jobs:
           mkdir -p pdfs
           for f in *.md; do
             [ -e "$f" ] || continue
+            [ "$f" = "README.md" ] && continue
             echo "Converting $f..."
             pandoc "$f" \
               --pdf-engine=xelatex \
-              -V geometry:margin=1in \
+              -V geometry:margin=0.75in \
               -V papersize=letter \
-              -V fontsize=11pt \
+              -V fontsize=10pt \
               -o "pdfs/${f%.md}.pdf"
           done
 
