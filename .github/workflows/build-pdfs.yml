@@ -1,11 +1,7 @@
 name: Build Printable PDFs
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**.md'
+  workflow_dispatch:
 
 jobs:
   build-pdfs:
@@ -24,16 +20,15 @@ jobs:
       - name: Convert Markdown to PDF
         run: |
           mkdir -p pdfs
-          for f in *.md; do
+          for f in docs/*.md; do
             [ -e "$f" ] || continue
-            [ "$f" = "README.md" ] && continue
             echo "Converting $f..."
             pandoc "$f" \
               --pdf-engine=xelatex \
               -V geometry:margin=0.75in \
               -V papersize=letter \
               -V fontsize=10pt \
-              -o "pdfs/${f%.md}.pdf"
+              -o "pdfs/$(basename "${f%.md}").pdf"
           done
 
       - name: Upload PDFs
